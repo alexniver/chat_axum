@@ -74,12 +74,12 @@ mod post {
                     } else {
                         match sqlx::query("insert into users (username, password) values (?, ?) ")
                             .bind(user.username)
-                            .bind(user.password)
+                            .bind(password_auth::generate_hash(user.password))
                             .execute(&state.db)
                             .await
                         {
                             Ok(_) => {
-                                messages.success(format!("Successfully register, please login"));
+                                messages.success(format!("Register done, please login"));
                                 url = "/login".to_string();
                             }
                             Err(e) => {

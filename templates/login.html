@@ -14,11 +14,18 @@
 
       <form action="/login" method="post">
         <div class="mb-4">
-          <label for="nickname" class="block text-gray-700 font-bold mb-2">nickname</label>
-          <input type="nickname" name="nickname" id="nickname"
+          <label for="username" class="block text-gray-700 font-bold mb-2">username</label>
+          <input type="username" name="username" id="username"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="please enter nickname">
+            placeholder="please enter username">
         </div>
+        <div class="mb-4">
+          <label for="password" class="block text-gray-700 font-bold mb-2">password</label>
+          <input type="password" name="password" id="password"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="please enter password">
+        </div>
+
 
         {% if let Some(next) = next %}
         <input type="hidden" name="next" value="{{next}}">
