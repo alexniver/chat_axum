@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}登陆{% endblock %}
+
+{% block content %}
+<div class="font-sans antialiased bg-gray-900">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="bg-gray-100 shadow-md rounded-lg p-8 w-full max-w-md">
+      <ul>
+        {% for msg in messages %}
+        <li><span class="text-3xl text-red-900">{{ msg }}</span></li>
+        {% endfor %}
+      </ul>
+
+      <form action="/login" method="post">
+        <div class="mb-4">
+          <label for="nickname" class="block text-gray-700 font-bold mb-2">nickname</label>
+          <input type="nickname" name="nickname" id="nickname"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="please enter nickname">
+        </div>
+
+        <button type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">GoGoGo
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
