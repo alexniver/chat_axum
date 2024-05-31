@@ -7,46 +7,53 @@
   <title>Chat</title>
 </head>
 
-<body class="bg-gray-900 h-screen flex items-center justify-center">
-  <div class="bg-gray-700 flex flex-col w-5/6 h-5/6 shadow-lg rounded-lg">
-        <div class="p-4 border-b border-gray-200 h-16">
-            <h2 class="text-lg text-gray-100 font-semibold">Chat</h2>
-        </div>
-        <div class="p-4 space-y-4 overflow-y-auto flex-grow">
-            <!-- Other user's message -->
-            <div class="flex items-start">
-                <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
-                    <p class="font-bold">Alice</p>
-                    <p>Hello! How are you?</p>
-                </div>
-            </div>
-            <!-- My message -->
-            <div class="flex items-end justify-end">
-                <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
-                    <p class="font-bold">Me</p>
-                    <p>I'm good, thank you! How about you?</p>
-                </div>
-            </div>
-            <!-- Other user's message -->
-            <div class="flex items-start">
-                <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
-                    <p class="font-bold">Alice</p>
-                    <p>I'm doing great, thanks!</p>
-                </div>
-            </div>
-            <!-- My message -->
-            <div class="flex items-end justify-end">
-                <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
-                    <p class="font-bold">Me</p>
-                    <p>Glad to hear that!</p>
-                </div>
-            </div>
-        </div>
-        <div class="p-4 h-20 border-t border-gray-200">
-            <input type="text" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Type your message...">
-        </div>
+<body>
+  <div class="font-sans antialiased bg-gray-900 text-gray-100 w-full h-1">
+    <div class="flex justify-end text-2xl">
+      <a class="underline mr-2" href="/logout">Logout</a> | 
     </div>
+  </div>
 
+  <div class="bg-gray-900 h-screen flex items-center justify-center">
+    <div class="bg-gray-700 flex flex-col w-5/6 h-5/6 shadow-lg rounded-lg">
+      <div class="p-4 border-b border-gray-200 h-16">
+        <h2 class="text-lg text-gray-100 font-semibold">Chat</h2>
+      </div>
+      <div class="p-4 space-y-4 overflow-y-auto flex-grow">
+        <!-- Other user's message -->
+        <div class="flex items-start">
+          <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
+            <p class="font-bold">Alice</p>
+            <p>Hello! How are you?</p>
+          </div>
+        </div>
+        <!-- My message -->
+        <div class="flex items-end justify-end">
+          <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
+            <p class="font-bold">Me</p>
+            <p>I'm good, thank you! How about you?</p>
+          </div>
+        </div>
+        <!-- Other user's message -->
+        <div class="flex items-start">
+          <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
+            <p class="font-bold">Alice</p>
+            <p>I'm doing great, thanks!</p>
+          </div>
+        </div>
+        <!-- My message -->
+        <div class="flex items-end justify-end">
+          <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
+            <p class="font-bold">Me</p>
+            <p>Glad to hear that!</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 h-20 border-t border-gray-200">
+        <input type="text" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Type your message...">
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>  
