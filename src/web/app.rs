@@ -57,7 +57,7 @@ impl App {
         let app_state = AppState::new(self.db.clone());
 
         let app = super::chat::router()
-            .route_layer(login_required!(Backend, login_url = "/login"))
+            // .route_layer(login_required!(Backend, login_url = "/login"))
             .merge(super::login::router())
             .merge(super::register::router(app_state))
             .merge(super::index::router())
