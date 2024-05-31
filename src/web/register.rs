@@ -58,11 +58,10 @@ mod post {
         State(state): State<AppState>,
         Form(user): Form<RegisterForm>,
     ) -> impl IntoResponse {
-        let mut url;
+        let mut url = "/register".to_string();
 
         if user.password != user.password2 {
             messages.error("pasword different");
-            url = "/register".to_string();
         } else {
             match sqlx::query("select * from users where username = ? ")
                 .bind(&user.username)
@@ -72,7 +71,6 @@ mod post {
                 Ok(u) => {
                     if u.is_some() {
                         messages.error("user name duplicate");
-                        url = "/register".to_string();
                     } else {
                         match sqlx::query("insert into users (username, password) values (?, ?) ")
                             .bind(user.username)
@@ -82,16 +80,19 @@ mod post {
                         {
                             Ok(_) => {
                                 messages.success(format!("Successfully register, please login"));
+                                url = "/login".to_string();
                             }
                             Err(e) => {
-                                error!("fail to register, error: {e}");
+                                error!("fail to insert user, error: {e}");
                                 return StatusCode::INTERNAL_SERVER_ERROR.into_response();
                             }
                         }
-                        url = "/login".to_string();
                     }
                 }
-                Err(_) => return StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+                Err(e) => {
+                    error!("fail to fetch user, error: {e}");
+                    return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+                }
             };
         }
         if let Some(next) = user.next {
