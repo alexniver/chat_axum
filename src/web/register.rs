@@ -1,21 +1,16 @@
 use askama::Template;
-use axum::{
-    extract::Query,
-    http::StatusCode,
-    response::{IntoResponse, Redirect},
-    routing::{get, post},
-    Form, Router,
-};
+use axum::{extract::Query, routing::get, Form, Router};
 use axum_messages::{Message, Messages};
 use serde::Deserialize;
 
-use super::next_url::*;
-use super::users::{AuthSession, Credentials};
+use super::{app_state::AppState, next_url::*};
 
-pub fn router() -> Router<()> {
+pub fn router(state: AppState) -> Router<()> {
     Router::new().route(
         "/register",
-        get(self::get::register).post(self::post::register),
+        get(self::get::register)
+            .post(self::post::register)
+            .with_state(state),
     )
 }
 
@@ -24,6 +19,14 @@ pub fn router() -> Router<()> {
 pub struct RegisterTemplate {
     messages: Vec<Message>,
     next: Option<String>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct RegisterForm {
+    pub username: String,
+    pub password: String,
+    pub password2: String,
+    pub next: Option<String>,
 }
 
 mod get {
@@ -41,39 +44,60 @@ mod get {
 }
 
 mod post {
+    use askama_axum::IntoResponse;
+    use axum::{extract::State, response::Redirect};
+    use axum_login::tracing::error;
+    use http::StatusCode;
+
+    use crate::web::app_state::AppState;
+
     use super::*;
 
     pub async fn register(
-        mut auth_session: AuthSession,
         messages: Messages,
-        Form(creds): Form<Credentials>,
+        State(state): State<AppState>,
+        Form(user): Form<RegisterForm>,
     ) -> impl IntoResponse {
-        let user = match auth_session.authenticate(creds.clone()).await {
-            Ok(Some(user)) => user,
-            Ok(None) => {
-                messages.error("Invalid credentials");
+        let mut url;
 
-                let mut login_url = "/login".to_string();
-                if let Some(next) = creds.next {
-                    login_url = format!("{}?next={}", login_url, next);
-                };
-
-                return Redirect::to(&login_url).into_response();
-            }
-            Err(_) => return StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+        if user.password != user.password2 {
+            messages.error("pasword different");
+            url = "/register".to_string();
+        } else {
+            match sqlx::query("select * from users where username = ? ")
+                .bind(&user.username)
+                .fetch_optional(&state.db)
+                .await
+            {
+                Ok(u) => {
+                    if u.is_some() {
+                        messages.error("user name duplicate");
+                        url = "/register".to_string();
+                    } else {
+                        match sqlx::query("insert into users (username, password) values (?, ?) ")
+                            .bind(user.username)
+                            .bind(user.password)
+                            .execute(&state.db)
+                            .await
+                        {
+                            Ok(_) => {
+                                messages.success(format!("Successfully register, please login"));
+                            }
+                            Err(e) => {
+                                error!("fail to register, error: {e}");
+                                return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+                            }
+                        }
+                        url = "/login".to_string();
+                    }
+                }
+                Err(_) => return StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+            };
+        }
+        if let Some(next) = user.next {
+            url = format!("{}?next={}", url, next);
         };
 
-        if auth_session.login(&user).await.is_err() {
-            return StatusCode::INTERNAL_SERVER_ERROR.into_response();
-        }
-
-        messages.success(format!("Successfully logged in as {}", user.username));
-
-        if let Some(ref next) = creds.next {
-            Redirect::to(next)
-        } else {
-            Redirect::to("/")
-        }
-        .into_response()
+        return Redirect::to(&url).into_response();
     }
 }

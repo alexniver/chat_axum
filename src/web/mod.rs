@@ -1,4 +1,5 @@
 mod app;
+mod app_state;
 mod chat;
 mod index;
 mod login;

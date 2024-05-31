@@ -10,7 +10,7 @@ use tokio::{signal, task::AbortHandle};
 use tower_sessions::cookie::Key;
 use tower_sessions_sqlx_store::SqliteStore;
 
-use super::users::Backend;
+use super::{app_state::AppState, users::Backend};
 
 pub struct App {
     db: SqlitePool,
@@ -50,14 +50,17 @@ impl App {
         //
         // This combines the session layer with our backend to establish the auth
         // service which will provide the auth session as a request extension.
-        let backend = Backend::new(self.db);
+        let backend = Backend::new(self.db.clone());
         let auth_layer = AuthManagerLayerBuilder::new(backend, session_layer).build();
+
+        // app_state
+        let app_state = AppState::new(self.db.clone());
 
         let app = super::chat::router()
             .route_layer(login_required!(Backend, login_url = "/login"))
-            .merge(super::index::router())
             .merge(super::login::router())
-            .merge(super::register::router())
+            .merge(super::register::router(app_state))
+            .merge(super::index::router())
             .layer(MessagesManagerLayer)
             .layer(auth_layer);
 
