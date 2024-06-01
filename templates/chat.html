@@ -10,29 +10,38 @@
 <body>
   <div class="font-sans antialiased bg-gray-900 text-gray-100 w-full h-1">
     <div class="flex justify-end text-2xl">
-      <a class="underline mr-2" href="/logout">Logout</a> | 
+      <a class="underline mr-2" href="/logout">Logout</a> |
     </div>
   </div>
 
   <div class="bg-gray-900 h-screen flex items-center justify-center">
-    <div class="bg-gray-700 flex flex-col w-5/6 h-5/6 shadow-lg rounded-lg">
+    <div class="bg-gray-700 flex flex-col w-5/6 lg:max-w-7xl h-5/6 shadow-lg rounded-lg">
       <div class="p-4 border-b border-gray-200 h-16">
         <h2 class="text-lg text-gray-100 font-semibold">Chat</h2>
       </div>
       <div class="p-4 space-y-4 overflow-y-auto flex-grow">
         <!-- Other user's message -->
         <div class="flex items-start">
-          <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
+          <div class="bg-gray-200 p-3 rounded-lg w-2/3">
             <p class="font-bold">Alice</p>
-            <p>Hello! How are you?</p>
+            <p class="break-words">Hello! How are
+              youuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu?
+            </p>
           </div>
         </div>
         <!-- My message -->
         <div class="flex items-end justify-end">
-          <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
+          <div class="bg-blue-500 text-white p-3 rounded-lg w-2/3">
             <p class="font-bold">Me</p>
-            <p>I'm good, thank you! How about you?</p>
+            <p class="break-words">I'm good, thank you! How about
+              youuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu?
+            </p>
           </div>
+        </div>
+        <div class="flex items-center relative px-4 py-2">
+          <div class="w-full border-b border-gray-400 mr-5"></div>
+          <span class="text-gray-100 whitespace-nowrap">xxx 加入了聊天</span>
+          <div class="w-full border-b border-gray-400 ml-5"></div>
         </div>
         <!-- Other user's message -->
         <div class="flex items-start">
@@ -56,5 +65,4 @@
   </div>
 </body>
 
-</html>  
-
+</html>
