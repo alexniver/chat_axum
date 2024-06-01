@@ -57,14 +57,16 @@ impl App {
         let app_state = AppState::new(self.db.clone());
 
         let app = super::chat::router(app_state.clone())
-            // .route_layer(login_required!(Backend, login_url = "/login"))
+            .route_layer(login_required!(Backend, login_url = "/login"))
             .merge(super::login::router())
             .merge(super::register::router(app_state))
             .merge(super::index::router())
             .layer(MessagesManagerLayer)
             .layer(auth_layer);
 
-        let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+        // let app = super::chat::router(app_state.clone()).layer(auth_layer);
+
+        let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
 
         // Ensure we use a shutdown signal to abort the deletion task.
         axum::serve(listener, app.into_make_service())

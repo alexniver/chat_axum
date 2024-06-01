@@ -1,6 +1,20 @@
-<div class="flex items-end justify-end">
-  <div class="bg-blue-500 text-white p-3 rounded-lg w-2/3">
-    <p class="font-bold">{{name}}</p>
-    <p class="break-words">{{msg}}</p>
+{% if is_me %}
+<div id="chat-messages" hx-swap-oob="beforeend">
+  <div class="flex items-end justify-end">
+    <div class="bg-blue-500 text-white p-3 rounded-lg max-w-96">
+      <p class="font-bold">{{name}}</p>
+      <p class="break-words">{{msg}}</p>
+    </div>
   </div>
 </div>
+{% else %}
+<div id="chat-messages" hx-swap-oob="beforeend">
+  <div class="flex items-start">
+    <div class="bg-gray-200 p-3 rounded-lg max-w-96">
+      <p class="font-bold">{{name}}</p>
+      <p class="break-words">{{msg}}
+      </p>
+    </div>
+  </div>
+</div>
+{% endif %}

@@ -14,55 +14,45 @@
     </div>
   </div>
 
-  <div class="bg-gray-900 h-screen flex items-center justify-center">
+  <div hx-ext="ws" ws-connect="/chat_ws" class="bg-gray-900 h-screen flex items-center justify-center">
     <div class="bg-gray-700 flex flex-col w-5/6 lg:max-w-7xl h-5/6 shadow-lg rounded-lg">
       <div class="p-4 border-b border-gray-200 h-16">
         <h2 class="text-lg text-gray-100 font-semibold">Chat</h2>
       </div>
-      <div class="p-4 space-y-4 overflow-y-auto flex-grow">
-        <!-- Other user's message -->
-        <div class="flex items-start">
-          <div class="bg-gray-200 p-3 rounded-lg w-2/3">
-            <p class="font-bold">Alice</p>
-            <p class="break-words">Hello! How are
-              youuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu?
-            </p>
-          </div>
-        </div>
-        <!-- My message -->
-        <div class="flex items-end justify-end">
-          <div class="bg-blue-500 text-white p-3 rounded-lg w-2/3">
-            <p class="font-bold">Me</p>
-            <p class="break-words">I'm good, thank you! How about
-              youuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu?
-            </p>
-          </div>
-        </div>
-        <div class="flex items-center relative px-4 py-2">
-          <div class="w-full border-b border-gray-400 mr-5"></div>
-          <span class="text-gray-100 whitespace-nowrap">xxx 加入了聊天</span>
-          <div class="w-full border-b border-gray-400 ml-5"></div>
-        </div>
-        <!-- Other user's message -->
-        <div class="flex items-start">
-          <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
-            <p class="font-bold">Alice</p>
-            <p>I'm doing great, thanks!</p>
-          </div>
-        </div>
-        <!-- My message -->
-        <div class="flex items-end justify-end">
-          <div class="bg-blue-500 text-white p-3 rounded-lg max-w-xs">
-            <p class="font-bold">Me</p>
-            <p>Glad to hear that!</p>
-          </div>
-        </div>
+      <div id="chat-messages" class="p-4 space-y-4 overflow-y-auto flex-grow">
+
       </div>
       <div class="p-4 h-20 border-t border-gray-200">
-        <input type="text" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Type your message...">
+        <form id="chatForm" ws-send>
+          <input type="text" id="msg" name="msg" class="w-full p-2 border border-gray-300 rounded-lg"
+            placeholder="Type your message...">
+        </form>
       </div>
     </div>
   </div>
 </body>
+
+<script>
+  // 只发送msg, 不发json
+  document.getElementById('chatForm').addEventListener('htmx:wsConfigSend', function (event) {
+    let msg = document.getElementById("msg").value;
+    event.detail.messageBody = msg;
+  });
+
+  document.getElementById('chatForm').addEventListener('htmx:wsAfterSend', function (event) {
+    // 确保发送成功并且是来自ws-send触发的
+    if (!event.detail.xhr || event.detail.triggerName === 'ws-send') {
+      // 清空输入框
+      document.getElementById('msg').value = '';
+    }
+  });
+
+  // 滚动条到最下
+  document.body.addEventListener("htmx:oobAfterSwap", function (evt) {
+    const chatWrapper = document.querySelector("#chat-messages");
+    chatWrapper.scrollTop = chatWrapper.scrollHeight;
+  });
+
+</script>
 
 </html>

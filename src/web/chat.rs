@@ -7,7 +7,7 @@ use super::users::AuthSession;
 pub fn router(app_state: AppState) -> Router<()> {
     Router::new()
         .route("/chat", get(self::get::chat))
-        .route("/ws", get(self::get::ws_handler).with_state(app_state))
+        .route("/chat_ws", get(self::get::ws_handler).with_state(app_state))
 }
 
 #[derive(Template)]
